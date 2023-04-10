@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+	<meta name="keywords" content="Calculadora, JavaScript, HTML, CSS" />
+  <meta name="description" content="Calculadora Estándar CSS grid & JavaScript - querySelector & addEventListener" />  
+  <meta name="author" content="Ricardo García - R.M.G." />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Estándar CSS grid & JavaScript - querySelector & addEventListener</title>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    #calculadora {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 20% repeat(6, 1fr);
+      grid-column-gap: 1.5vh;
+      grid-row-gap: 1.5vh;
+      height: 60em;
+      width: 40em;
+      margin: auto;
+      padding: 3vh;
+      background: #ffffff;
+      /*--fondo-pantalla: hsla(30, 25%, 15%, 1);
+      --color-pantalla-1: hsla(30, 100%, 50%, 1);
+      --color-pantalla-2: hsla(30, 75%, 95%, 0.95);
+      --fondo-numeros: hsla(30, 80%, 25%, 0.25);
+      --fondo-operadores: hsla(30, 80%, 25%, 0.85);
+      --fondo-adicionales: hsla(30, 80%, 25%, 0.55);
+      --color-numeros: hsla(30, 25%, 15%, 1);
+      --color-operadores: hsla(30, 75%, 95%, 0.95);
+      --color-adicionales: hsla(30, 100%, 80%, 1);*/
+      --esquina: 1vh;
+      --sombra: 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75);
+      --fuente: 'Courier New', monospace;
+      --grueso-fuente: normal;
+      --tamano-fuente-01: 6vh;
+      --tamano-fuente-02: 4.5vh;
+      transform: scale(60%);
+    }
+
+    #pantalla {
+      display: grid;
+      grid-template-columns: 100%;
+      grid-template-rows: 40% 60%;
+      grid-row-gap: 1.5vh;
+      padding: 3vh;
+      background: var(--fondo-pantalla, #000000);
+      border: none;
+      border-radius: var(--esquina, 1vh);
+      box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));		
+      grid-column: 1/5;
+    }
+        
+    #pantalla_memoria { 
+      outline: none;
+      background: transparent;
+      color: var(--color-pantalla-1, #aaaaaa);   	
+      border: none;
+      font-family: var(--fuente, Arial);
+      font-size: 5vh;
+      text-align: right;
+    }
+
+    #pantalla_actual {
+      outline: none;
+      background: transparent;
+      color: var(--color-pantalla-2, #ffffff);    	
+      border: none;
+      font-family: var(--fuente, Arial);
+      font-size: 8vh;
+      text-align: right;
+    }
+
+    .numeros {
+      border: none;
+      background: var(--fondo-numeros, #000000);
+      color: var(--color-numeros, #ffffff);
+      border-radius: var(--esquina, 1vh);
+      box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+      font-family: var(--fuente, Arial);
+      font-weight: var(--grueso-fuente, bold);
+      font-size: var(--tamano-fuente-01, 6vh);
+    }
+
+    #boton_mas_menos {    
+      font-size: var(--tamano-fuente-02, 4.5vh);
+    }	
+        
+    .operadores {
+      border: none;
+      background: var(--fondo-operadores, #dddddd);
+      color: var(--color-operadores, #000000);
+      border-radius: var(--esquina, 1vh);
+      box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+      font-family: var(--fuente, Arial);
+      font-weight: var(--grueso-fuente, bold);
+      font-size: var(--tamano-fuente-01, 6vh);
+    }
+
+    #boton_igual {
+      grid-column: 4/5;
+      grid-row: 6/8;
+    }
+
+    .adicionales {
+      border: none;
+      background: var(--fondo-adicionales, #555555);
+      color: var(--color-adicionales, #ffffff);
+      border-radius: var(--esquina, 1vh);
+      box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+      font-family: var(--fuente, Arial);
+      font-weight: var(--grueso-fuente, bold);
+      font-size: var(--tamano-fuente-02, 4.5vh);
+    }	
+
+    #boton_inverso {
+      letter-spacing: -0.6vh;
+    }
+
+    #calculadora .numeros:hover, 
+    #calculadora .operadores:hover, 
+    #calculadora .adicionales:hover { 
+      background: var(--color-pantalla-1, rgba(0, 155, 255, 1));
+      color: hsla(30, 25%, 15%, 1);
+      font-size: 7vh;
+      cursor: pointer;
+      transform: scale(103%);
+    }	
+
+    #calculadora .adicionales:hover,
+    #calculadora #boton_mas_menos:hover {
+      font-size: 5.5vh;
+    }
+
+    #calculadora .numeros:active {
+      background: var(--fondo-numeros, #000000);
+      color: var(--color-numeros, #ffffff);
+      font-size: var(--tamano-fuente-01, 6vh);
+      transform: scale(100%);
+    }
+
+    #calculadora #boton_mas_menos:active {
+      font-size: var(--tamano-fuente-02, 4.5vh);
+    }
+
+    #calculadora .operadores:active {
+      background: var(--fondo-operadores, #ffffff);
+      color: var(--color-operadores, #000000);
+      font-size: var(--tamano-fuente-01, 6vh);
+      transform: scale(100%);
+    }
+
+    #calculadora .adicionales:active {
+      background: var(--fondo-adicionales, #ffffff);
+      color: var(--color-adicionales, #aaaaaa);
+      font-size: var(--tamano-fuente-02, 4.5vh);
+      transform: scale(100%);
+    }
+
+    @media only screen and (orientation: landscape) {
+      #calculadora {
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: 30% repeat(3, 1fr);
+        height: 45em;
+	      width: 60em;
+      }
+
+      #pantalla {
+        grid-column: 1/9;
+      }
+
+      #boton_mas_menos { grid-area: 2 / 1 / 3 / 2; }
+      #boton_punto { grid-area: 3 / 1 / 4 / 2; }
+      #boton_cero { grid-area: 4 / 1 / 5 / 2; }
+      #boton_siete { grid-area: 2 / 2 / 3 / 3; }
+      #boton_cuatro { grid-area: 3 / 2 / 4 / 3; }
+      #boton_uno { grid-area: 4 / 2 / 5 / 3; }  
+      #boton_ocho { grid-area: 2 / 3 / 3 / 4; }
+      #boton_cinco { grid-area: 3 / 3 / 4 / 4; }
+      #boton_dos { grid-area: 4 / 3 / 5 / 4; }  
+      #boton_nueve { grid-area: 2 / 4 / 3 / 5; }
+      #boton_seis { grid-area: 3 / 4 / 4 / 5; }
+      #boton_tres { grid-area: 4 / 4 / 5 / 5; }
+      #boton_porcentaje { grid-area: 2 / 5 / 3 / 6; }
+      #boton_inverso { grid-area: 3 / 5 / 4 / 6; }
+      #boton_pi { grid-area: 4 / 5 / 5 / 6; }
+      #boton_resetear { grid-area: 2 / 6 / 3 / 7; }
+      #boton_potencia { grid-area: 3 / 6 / 4 / 7; }
+      #boton_raiz { grid-area: 4 / 6 / 5 / 7; }       
+      #boton_dividir { grid-area: 2 / 7 / 3 / 8; }
+      #boton_multiplicar { grid-area: 3 / 7 / 4 / 8; }
+      #boton_restar { grid-area: 2 / 8 / 3 / 9; }        
+      #boton_sumar { grid-area: 3 / 8 / 4 / 9; }
+      #boton_igual { grid-area: 4 / 7 / 5 / 9; }
+    }
+
+    @media only screen and (max-width: 650px) {
+      #calculadora {
+        height: 100vh;
+	      width: 100vw;
+        transform: scale(100%);
+      }
+    }
+
+    @media only screen and (orientation: landscape) {
+      @media only screen and (max-width: 900px) {
+        @media only screen and (max-height: 450px) {
+          #calculadora {
+            height: 100vh;
+            width: 100vw;
+            --tamano-fuente-01: 10vh;
+            --tamano-fuente-02: 7.5vh;
+            transform: scale(100%);
+          }
+          #calculadora .numeros:hover, 
+          #calculadora .operadores:hover, 
+          #calculadora .adicionales:hover { 
+            font-size: 11vh;
+          }	
+          #calculadora .adicionales:hover,
+          #calculadora #boton_mas_menos:hover {
+            font-size: 8.5vh;
+          }
+        }
+      }
+    }
+  </style>
+</head>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<body>	
+  <main class="contenido">
+		<div id="calculadora">
+						
+			<div id="pantalla">
+				<input type="text" class="pantallas" id="pantalla_memoria" readonly>			
+				<input type="text" class="pantallas" id="pantalla_actual" value="0" readonly>
+			</div>	
+			
+			<input type="button" class="adicionales" id="boton_porcentaje" value="%" />
+			<input type="button" class="adicionales" id="boton_pi" value="π" />			
+			<input type="button" class="adicionales" id="boton_resetear" value="C" />
+			<input type="button" class="operadores" id="boton_dividir" value="÷" />
+
+			<input type="button" class="adicionales" id="boton_inverso" value="¹/x" />
+			<input type="button" class="adicionales" id="boton_cuadrado" value="x²" />
+			<input type="button" class="adicionales" id="boton_raiz" value="²√" />
+			<input type="button" class="operadores" id="boton_multiplicar" value="x" />	
+
+			<input type="button" class="numeros numero" id="boton_siete" value="7" />
+			<input type="button" class="numeros numero" id="boton_ocho" value="8" />
+			<input type="button" class="numeros numero" id="boton_nueve" value="9" />
+			<input type="button" class="operadores" id="boton_restar" value="-" />
+
+			<input type="button" class="numeros numero" id="boton_cuatro" value="4" />
+			<input type="button" class="numeros numero" id="boton_cinco" value="5" />
+			<input type="button" class="numeros numero" id="boton_seis" value="6" />				
+			<input type="button" class="operadores" id="boton_sumar" value="+" />	
+			
+			<input type="button" class="numeros numero" id="boton_uno" value="1" />
+			<input type="button" class="numeros numero" id="boton_dos" value="2" />
+			<input type="button" class="numeros numero" id="boton_tres" value="3" />
+			
+			<input type="button" class="numeros" id="boton_mas_menos" value="+/-" />		
+			<input type="button" class="numeros numero" id="boton_cero" value="0" />
+			<input type="button" class="numeros" id="boton_punto" value="." />
+
+			<input type="button" class="operadores" id="boton_igual" value="=" />			
+		</div>
+	</main>	
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->	
+  <script>
+    // REFERENCIAS HTML //
+    const pantallaMemoria = document.querySelector("#pantalla_memoria");
+    const pantallaActual = document.querySelector("#pantalla_actual");
+    const botonResetear = document.querySelector("#boton_resetear");
+    const botonPorcentaje = document.querySelector("#boton_porcentaje");
+    const botonInverso = document.querySelector("#boton_inverso");
+    const botonCuadrado = document.querySelector("#boton_cuadrado");
+    const botonRaiz = document.querySelector("#boton_raiz");
+    const botonPI = document.querySelector("#boton_pi");
+    const botonDividir = document.querySelector("#boton_dividir");
+    const botonMultiplicar = document.querySelector("#boton_multiplicar");
+    const botonRestar = document.querySelector("#boton_restar");
+    const botonSumar = document.querySelector("#boton_sumar");
+    const botonMasMenos = document.querySelector("#boton_mas_menos");
+    const botonPunto = document.querySelector("#boton_punto");
+    const botonIgual = document.querySelector("#boton_igual");
+    const botonNumero = document.querySelectorAll(".numero");
+
+    // VARIABLES GLOBALES //
+    let numero = 0;
+    let memoria = 0;
+    let operacion = "";
+    let ultima = "";
+
+    // RESETEAR //
+    botonResetear.addEventListener("click", () => {
+      // AL PRESIONAR EL BOTON "C" LA pantalla_memoria SE BORRA.
+      pantallaMemoria.value = "";
+      // AL PRESIONAR EL BOTON "C" LA pantalla_actual SE BORRA.
+      pantallaActual.value = 0;
+      // AL PRESIONAR EL BOTON "C" SE RESTABLECE EL VALOR DE TODAS LAS VARIABLES GLOBALES.
+      numero = 0;
+      memoria = 0;
+      operacion = "";
+      ultima = "";
+    });
+
+    // DIGITAR NUMERO //
+    botonNumero.forEach((boton) => {
+      boton.addEventListener("click", () => {    
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "=, ²√, x², ¹/x, % ó π" HACE UN RESETEO Y CONTINUA.
+      if(operacion === "=" || ultima === "r" || ultima === "c" || ultima === "i" || ultima === "p" || ultima === "π") {
+        numero = 0;
+        memoria = 0;
+        pantallaMemoria.value = "";
+        pantallaActual.value = numero + parseInt(boton.value, 10);
+        numero = pantallaActual.value;
+        operacion = "";    
+      } 
+      // SI EL VALOR DE pantalla_actual ES IGUAL A "-0" ELIMINA EL "0" Y CONTINUA.
+      else if (numero === "-0") {
+        numero = "-";
+        pantallaActual.value = numero + parseInt(boton.value, 10);
+        numero = pantallaActual.value;
+      } 
+      // SI EL VALOR DE pantalla_actual ES IGUAL A "0" NO PERMITE ESCRIBIR MÁS CEROS.
+      else if (numero === "0") {
+        numero = "";
+        pantallaActual.value = numero + parseInt(boton.value, 10);
+        numero = pantallaActual.value;  
+      } else {  // SI NO SE PRESENTA NINGUNO DE LOS CASOS ANTERIORES PERMITE ESCRIBIR NUMEROS DEL 0 AL 9.
+        pantallaActual.value = numero + parseInt(boton.value, 10);
+        numero = pantallaActual.value;
+      }    
+      ultima = "";
+      });
+    });
+
+    // PUNTO DECIMAL //
+    botonPunto.addEventListener("click", () => {
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "=, ²√, x², ¹/x, % ó π" HACE UN RESETEO Y CONTINUA.
+      if(operacion === "=" || ultima === "r" || ultima === "c" || ultima === "i" || ultima === "p" || ultima === "π") {
+        numero = 0;
+        memoria = 0;
+        pantallaMemoria.value = "";
+        pantallaActual.value = numero + ".";
+        numero = numero + ".";
+        operacion = "";
+        ultima = "";   
+      } 
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" pantalla_actual SERA IGUAL A "0."
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaActual.value = numero + ".";
+        numero = numero + ".";
+      }
+      // SI pantalla_actual CONTIENE UN "." LA FUNCIÓN NO HACE NADA.
+      else if(pantallaActual.value.includes(".")) {
+        //NO HACER NADA.
+      } else {  // SI pantalla_actual NO CONTIENE UN "." SE AGREGA AL FINAL DEL NÚMERO.
+        pantallaActual.value = numero + ".";
+        numero = numero + ".";
+      } 
+    });
+
+    // CAMBIAR SIGNO //
+    botonMasMenos.addEventListener("click", () => {
+      // SI pantalla_actual ES IGUAL A "0" O EL ULTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" pantalla_actual SERA IGUAL A "-0".
+      if (pantallaActual.value === "0" || ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaActual.value = "-0";
+        numero = "-0";
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "=, ²√, x², ¹/x ó %" HACE UN RESETEO Y CONTINUA.
+      else if (operacion === "=" || ultima === "r" || ultima === "c" || ultima === "i" || ultima === "p") {
+        pantallaMemoria.value = "";
+        pantallaActual.value = "-0";
+        numero = "-0";
+        operacion = "";
+      }
+      // SI pantalla_actual INICIA CON EL SIGNO "-" RETIRA EL SIGNO Y CONTINUA.
+      else if(pantallaActual.value.startsWith("-")) {
+        pantallaActual.value = numero.slice(1);   
+        numero = pantallaActual.value;         
+      } 
+      // SI pantalla_actual NO INICIA CON EL SIGNO "-" AGREGA EL SIGNO Y CONTINUA.
+      else if(!pantallaActual.value.startsWith("-")) {
+        pantallaActual.value = "-" + pantallaActual.value;
+        numero = pantallaActual.value;
+      }   
+      ultima = "";
+    });
+
+    // SUMAR //
+    botonSumar.addEventListener("click", () => {
+      // SI pantalla_memoria ESTA VACIA Y pantalla_actual ES IGUAL A "0" UTILIZA "0" COMO PRIMER SUMANDO.
+      if(pantallaMemoria.value === "" && pantallaActual.value === "0") {
+        pantallaMemoria.value = 0 + " +";
+      }
+      // SI EL ULTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MANTIENE O CONVIERTE LA SIGUIENTE OPERACIÓN EN UNA SUMA.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaMemoria.value = memoria + " +";
+        pantallaActual.value = memoria;
+      }
+      // SI NO SE A REALIZADO NINGUNA OPERACIÓN LA SIGUIENTE OPERACIÓN SERA UNA SUMA.
+      else if(operacion === "") {
+        pantallaMemoria.value = parseFloat(numero) + " +";
+        pantallaActual.value = parseFloat(numero);
+        memoria = numero;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA LA SUMA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA SUMA.
+      else if(operacion === "+") {
+        pantallaMemoria.value = parseFloat(memoria) + parseFloat(numero) + " +";
+        pantallaActual.value = parseFloat(memoria) + parseFloat(numero);
+        memoria = parseFloat(memoria) + parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA LA RESTA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA SUMA.
+      else if(operacion === "-") {
+        pantallaMemoria.value = parseFloat(memoria) - parseFloat(numero) + " +";
+        pantallaActual.value = parseFloat(memoria) - parseFloat(numero);
+        memoria = parseFloat(memoria) - parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA LA MULTIPLICACIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA SUMA.
+      else if(operacion === "*") {
+        pantallaMemoria.value = parseFloat(memoria) * parseFloat(numero) + " +";
+        pantallaActual.value = parseFloat(memoria) * parseFloat(numero);
+        memoria = parseFloat(memoria) * parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA LA DIVISIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA SUMA.
+      else if(operacion === "/") {
+        pantallaMemoria.value = parseFloat(memoria) / parseFloat(numero) + " +";
+        pantallaActual.value = parseFloat(memoria) / parseFloat(numero);
+        memoria = parseFloat(memoria) / parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO PRIMER SUMANDO Y PREPARA LA SIGUIENTE OPERACIÓN.
+      else if(operacion === "=") {
+        pantallaMemoria.value = parseFloat(memoria) + " +";
+        pantallaActual.value = parseFloat(memoria);
+        //memoria = parseFloat(numero);
+      }
+      numero = 0;
+      operacion = "+";  
+      ultima = "+";
+    });
+
+    // RESTAR //
+    botonRestar.addEventListener("click", () => {
+    // SI pantalla_memoria ESTA VACIA Y pantalla_actual ES IGUAL A "0" UTILIZA "0" COMO MINUENDO.
+    if (pantallaMemoria.value === "" && pantallaActual.value === "0") {
+      pantallaMemoria.value = 0 + " -";
+    }
+    // SI EL ULTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MANTIENE O CONVIERTE LA SIGUIENTE OPERACIÓN EN UNA RESTA.
+    else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+      pantallaMemoria.value = memoria + " -";
+      pantallaActual.value = memoria;
+    }
+    // SI NO SE A REALIZADO NINGUNA OPERACIÓN LA SIGUIENTE OPERACIÓN SERA UNA RESTA.
+    else if(operacion === "") {
+      pantallaMemoria.value = parseFloat(numero) + " -";
+      pantallaActual.value = parseFloat(numero);
+      memoria = numero;
+    }
+    // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA LA RESTA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA RESTA.
+    else if (operacion === "-") {
+      pantallaMemoria.value = parseFloat(memoria) - parseFloat(numero) + " -";
+      pantallaActual.value = parseFloat(memoria) - parseFloat(numero);
+      memoria = parseFloat(memoria) - parseFloat(numero);    
+    }
+    // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA LA SUMA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA RESTA.
+    else if(operacion === "+") {
+      pantallaMemoria.value = parseFloat(memoria) + parseFloat(numero) + " -";
+      pantallaActual.value = parseFloat(memoria) + parseFloat(numero);
+      memoria = parseFloat(memoria) + parseFloat(numero);
+    }
+    // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA LA MULTIPLICACIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA RESTA.
+    else if(operacion === "*") {
+      pantallaMemoria.value = parseFloat(memoria) * parseFloat(numero) + " -";
+      pantallaActual.value = parseFloat(memoria) * parseFloat(numero);
+      memoria = parseFloat(memoria) * parseFloat(numero);
+    }
+    // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA LA DIVISIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA RESTA.
+    else if(operacion === "/") {
+      pantallaMemoria.value = parseFloat(memoria) / parseFloat(numero) + " -";
+      pantallaActual.value = parseFloat(memoria) / parseFloat(numero);
+      memoria = parseFloat(memoria) / parseFloat(numero);
+    }
+    // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO MINUENDO Y PREPARA LA SIGUIENTE OPERACIÓN.
+    else if(operacion === "=") {
+      pantallaMemoria.value = parseFloat(memoria) + " -";
+      pantallaActual.value = parseFloat(memoria);
+    }
+    numero = 0;
+    operacion = "-";
+    ultima = "-";
+    });
+
+    // MULTIPLICAR //
+    botonMultiplicar.addEventListener("click", () => {
+      // SI pantalla_memoria ESTA VACIA Y pantalla_actual ES IGUAL A "0" UTILIZA "0" COMO PRIMER FACTOR.
+      if (pantallaMemoria.value === "" && pantallaActual.value === "0") {
+        pantallaMemoria.value = 0 + " x";
+      }
+      // SI EL ULTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MANTIENE O CONVIERTE LA SIGUIENTE OPERACIÓN EN UNA MULTIPLICACIÓN.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaMemoria.value = memoria + " x";
+        pantallaActual.value = memoria;
+      }
+      // SI NO SE A REALIZADO NINGUNA OPERACIÓN LA SIGUIENTE OPERACIÓN SERA UNA MULTIPLICACIÓN.
+      else if(operacion === "") {
+        pantallaMemoria.value = parseFloat(numero) + " x";
+        pantallaActual.value = parseFloat(numero);
+        memoria = numero;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA LA MULTIPLICACIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA MULTIPLICACIÓN.
+      else if (operacion === "*") {
+        pantallaMemoria.value = parseFloat(memoria) * parseFloat(numero) + " x";
+        pantallaActual.value = parseFloat(memoria) * parseFloat(numero);
+        memoria = parseFloat(memoria) * parseFloat(numero);    
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA LA SUMA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA MULTIPLICACIÓN.
+      else if(operacion === "+") {
+        pantallaMemoria.value = parseFloat(memoria) + parseFloat(numero) + " x";
+        pantallaActual.value = parseFloat(memoria) + parseFloat(numero);
+        memoria = parseFloat(memoria) + parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA LA RESTA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA MULTIPLICACIÓN.
+      else if(operacion === "-") {
+        pantallaMemoria.value = parseFloat(memoria) - parseFloat(numero) + " x";
+        pantallaActual.value = parseFloat(memoria) - parseFloat(numero);
+        memoria = parseFloat(memoria) - parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA LA DIVISIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA MULTIPLICACIÓN.
+      else if(operacion === "/") {
+        pantallaMemoria.value = parseFloat(memoria) / parseFloat(numero) + " x";
+        pantallaActual.value = parseFloat(memoria) / parseFloat(numero);
+        memoria = parseFloat(memoria) / parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO PRIMER FACTOR Y PREPARA LA SIGUIENTE OPERACIÓN.
+      else if(operacion === "=") {
+        pantallaMemoria.value = parseFloat(memoria) + " x";
+        pantallaActual.value = parseFloat(memoria);
+      }
+      numero = 0;
+      operacion = "*";
+      ultima = "*"
+    });
+
+    // DIVIDIR //
+    botonDividir.addEventListener("click", () => {
+      // SI pantalla_memoria ESTA VACIA Y pantalla_actual ES IGUAL A "0" UTILIZA "0" COMO DIVIDENDO.
+      if (pantallaMemoria.value === "" && pantallaActual.value === "0") {
+        pantallaMemoria.value = 0 + " ÷";
+      }
+      // SI EL ULTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MANTIENE O CONVIERTE LA SIGUIENTE OPERACIÓN EN UNA DIVISIÓN.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaMemoria.value = memoria + " ÷";
+        pantallaActual.value = memoria;
+      }
+      // SI NO SE A REALIZADO NINGUNA OPERACIÓN LA SIGUIENTE OPERACIÓN SERA UNA DIVISIÓN.
+      else if(operacion === "") {
+        pantallaMemoria.value = parseFloat(numero) + " ÷";
+        pantallaActual.value = parseFloat(numero);
+        memoria = numero;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA LA DIVISIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA DIVISIÓN.
+      else if (operacion === "/") {
+        pantallaMemoria.value = parseFloat(memoria) / parseFloat(numero) + " ÷";
+        pantallaActual.value = parseFloat(memoria) / parseFloat(numero);
+        memoria = parseFloat(memoria) / parseFloat(numero);    
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA LA SUMA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA DIVISIÓN.
+      else if(operacion === "+") {
+        pantallaMemoria.value = parseFloat(memoria) + parseFloat(numero) + " ÷";
+        pantallaActual.value = parseFloat(memoria) + parseFloat(numero);
+        memoria = parseFloat(memoria) + parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA LA RESTA Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA DIVISIÓN.
+      else if(operacion === "-") {
+        pantallaMemoria.value = parseFloat(memoria) - parseFloat(numero) + " ÷";
+        pantallaActual.value = parseFloat(memoria) - parseFloat(numero);
+        memoria = parseFloat(memoria) - parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA LA MULTIPLICACIÓN Y PREPARA LA SIGUIENTE OPERACIÓN QUE SERA UNA DIVISIÓN.
+      else if(operacion === "*") {
+        pantallaMemoria.value = parseFloat(memoria) * parseFloat(numero) + " ÷";
+        pantallaActual.value = parseFloat(memoria) * parseFloat(numero);
+        memoria = parseFloat(memoria) * parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO PRIMER FACTOR Y PREPARA LA SIGUIENTE OPERACIÓN.
+      else if(operacion === "=") {
+        pantallaMemoria.value = parseFloat(memoria) + " ÷";
+        pantallaActual.value = parseFloat(memoria);
+      }
+      numero = 0;
+      operacion = "/";  
+      ultima = "/";
+    });
+
+    // RESULTADO //
+    botonIgual.addEventListener("click", () => {
+      // SI pantalla_memoria ESTA VACIA Y pantalla_actual ES IGUAL A "0" NO HACE NADA.
+      if(pantallaMemoria.value === "" && pantallaActual.value === "0") {
+        pantallaMemoria.value = "";
+        pantallaActual.value = 0;   
+      }
+      // SI NO SE A REALIZADO NINGUNA OPERACIÓN NO HACE NADA.
+      else if (operacion === "") {
+        //NO HACER NADA.
+        memoria = numero;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA LA SUMA Y GUARDA EL VALOR EN LA MEMORIA.
+      else if (operacion === "+") {
+        pantallaMemoria.value = parseFloat(memoria) + " + " + parseFloat(numero) + " =";
+        pantallaActual.value = parseFloat(memoria) + parseFloat(numero);
+        memoria = parseFloat(memoria) + parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA LA RESTA Y GUARDA EL VALOR EN LA MEMORIA.
+      else if (operacion === "-") {
+        pantallaMemoria.value = parseFloat(memoria) + " - " + parseFloat(numero) + " =";
+        pantallaActual.value = parseFloat(memoria) - parseFloat(numero);
+        memoria = parseFloat(memoria) - parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA LA MULTIPLICACIÓN Y GUARDA EL VALOR EN LA MEMORIA.
+      else if (operacion === "*") {
+        pantallaMemoria.value = parseFloat(memoria) + " x " + parseFloat(numero) + " =";
+        pantallaActual.value = parseFloat(memoria) * parseFloat(numero);
+        memoria = parseFloat(memoria) * parseFloat(numero);
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA LA DIVISIÓN Y GUARDA EL VALOR EN LA MEMORIA.
+      else if (operacion === "/") {
+        pantallaMemoria.value = parseFloat(memoria) + " ÷ " + parseFloat(numero) + " =";
+        pantallaActual.value = parseFloat(memoria) / parseFloat(numero);
+        memoria = parseFloat(memoria) / parseFloat(numero);
+      }   
+      numero = 0;
+      operacion = "=";
+    });
+
+    // RAIZ //
+    botonRaiz.addEventListener("click", () => {
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU RAIZ CUADRADA.
+      if(operacion === "=") {
+        pantallaMemoria.value = "²√ " + parseFloat(memoria) + " =";
+        pantallaActual.value = Math.sqrt(memoria);
+        memoria = Math.sqrt(memoria);
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" Ó SI EL VALOR DE pantalla_actual ES MENOR QUE "0" MARCA UN ERROR Y REALIZA UN RESETEO.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/" || numero < 0) {
+        pantallaMemoria.value = "EXPRESIÓN INCORRECTA";
+        pantallaActual.value = "ERROR";
+        numero = 0;
+        memoria = 0;
+        operacion = "";
+        ultima = "";
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "²√, x², ¹/x ó %" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU RAIZ CUADRADA.
+      else if(ultima === "c" || ultima === "r" || ultima === "i" || ultima === "p") {
+        pantallaMemoria.value = "²√ " + parseFloat(numero) + " =";
+        pantallaActual.value = Math.sqrt(numero);
+        numero = Math.sqrt(numero);
+      }
+      // SI SE ESTA REALIZANDO UN CADENA DE OPERACIONES OBTIENE LA RAIZ CUADRADA DEL ULTIMO NUMERO Y LA AGREGA A LA CADENA.
+      else if(pantallaMemoria.value !== "") {
+        pantallaMemoria.value = pantallaMemoria.value + " ²√ " + parseFloat(numero);
+        pantallaActual.value = "²√" + parseFloat(numero);
+        numero = Math.sqrt(numero);  
+      } else {  // SI NO SE PRESENTA NINGUNO DE LOS CASOS ANTERIORES UTILIZA EL VALOR DE pantalla_actual PARA OBTENER SU RAIZ CUADRADA.
+        pantallaMemoria.value = "²√ " + parseFloat(numero) + " =";
+        pantallaActual.value = Math.sqrt(numero);
+        numero = Math.sqrt(numero);
+      }
+      ultima = "r";
+    });
+
+    // CUADRADO //
+    botonCuadrado.addEventListener("click", () => {
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU CUADRADO.
+      if(operacion === "=") {
+        pantallaMemoria.value = parseFloat(memoria) + "² =";
+        pantallaActual.value = memoria * memoria;
+        memoria = memoria * memoria;
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MARCA UN ERROR Y REALIZA UN RESETEO.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaMemoria.value = "EXPRESIÓN INCORRECTA";
+        pantallaActual.value = "ERROR";
+        numero = 0;
+        memoria = 0;
+        operacion = "";
+        ultima = "";
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "²√, x², ¹/x ó %" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU CUADRADO.
+      else if(ultima === "c" || ultima === "r" || ultima === "i" || ultima === "p") {
+        pantallaMemoria.value = parseFloat(numero) + "² =";
+        pantallaActual.value = numero * numero;
+        numero = numero * numero;
+      }
+      // SI SE ESTA REALIZANDO UN CADENA DE OPERACIONES OBTIENE EL CUADRADO DEL ULTIMO NUMERO Y LO AGREGA A LA CADENA.
+      else if(pantallaMemoria.value !== "") {
+        pantallaMemoria.value = pantallaMemoria.value + " " + parseFloat(numero) + "²";
+        pantallaActual.value = parseFloat(numero) + "²";
+        numero = numero * numero;
+      } else {  // SI NO SE PRESENTA NINGUNO DE LOS CASOS ANTERIORES UTILIZA EL VALOR DE pantalla_actual PARA OBTENER SU CUADRADO.
+        pantallaMemoria.value = parseFloat(numero) + "² =";
+        pantallaActual.value = numero * numero;
+        numero = numero * numero;
+      }
+      ultima = "c";
+    });
+
+    // INVERSO //
+    botonInverso.addEventListener("click", () => {
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "=" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU INVERSO.
+      if(operacion === "=") {
+        pantallaMemoria.value = "¹/ " + parseFloat(memoria) + " =";
+        pantallaActual.value = 1 / memoria;
+        memoria = 1 / memoria;
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "+, -, x ó ÷" MARCA UN ERROR Y REALIZA UN RESETEO.
+      else if(ultima === "+" || ultima === "-" || ultima === "*" || ultima === "/") {
+        pantallaMemoria.value = "EXPRESIÓN INCORRECTA";
+        pantallaActual.value = "ERROR";
+        numero = 0;
+        memoria = 0;
+        operacion = "";
+        ultima = "";
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "²√, x², ¹/x ó %" UTILIZA EL RESULTADO COMO VALOR PARA OBTENER SU INVERSO.
+      else if(ultima === "c" || ultima === "r" || ultima === "i" || ultima === "p") {
+        pantallaMemoria.value = "¹/ " + parseFloat(numero) + " =";
+        pantallaActual.value = 1 / numero;
+        numero = 1 / numero;
+      }
+      // SI SE ESTA REALIZANDO UN CADENA DE OPERACIONES OBTIENE EL INVERSO DEL ULTIMO NUMERO Y LO AGREGA A LA CADENA.
+      else if(pantallaMemoria.value !== "") {
+        pantallaMemoria.value = pantallaMemoria.value + " ¹/ " + parseFloat(numero);
+        pantallaActual.value = "¹/" + parseFloat(numero);
+        numero = 1 / numero;  
+      } else {  // SI NO SE PRESENTA NINGUNO DE LOS CASOS ANTERIORES UTILIZA EL VALOR DE pantalla_actual PARA OBTENER SU INVERSO.
+        pantallaMemoria.value = "¹/ " + parseFloat(numero) + " =";
+        pantallaActual.value = 1 / numero;
+        numero = 1 / numero;
+      }
+      ultima = "i";
+    });
+
+    // PORCENTAJE //
+    botonPorcentaje.addEventListener("click", () => {
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "+" REALIZA UNA SUMA ENTRE EL VALOR DE MEMORIA Y EL PORCENTAJE DADO.
+      if(operacion === "+") {
+        pantallaMemoria.value = parseFloat(memoria) + " + " + parseFloat(numero) + "% =";
+        pantallaActual.value = parseFloat(memoria) + parseFloat(memoria) * parseFloat(numero) / 100;
+        numero = parseFloat(memoria) + parseFloat(memoria) * parseFloat(numero) / 100;
+      }  
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "-" REALIZA UNA RESTA ENTRE EL VALOR DE MEMORIA Y EL PORCENTAJE DADO.
+      else if(operacion === "-") {
+        pantallaMemoria.value = parseFloat(memoria) + " - " + parseFloat(numero) + "% =";
+        pantallaActual.value = parseFloat(memoria) - parseFloat(memoria) * parseFloat(numero) / 100;
+        numero = parseFloat(memoria) - parseFloat(memoria) * parseFloat(numero) / 100;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "x" REALIZA UNA MULTIPLICACIÓN ENTRE EL VALOR DE MEMORIA Y EL PORCENTAJE DADO.
+      else if(operacion === "*") {
+        pantallaMemoria.value = parseFloat(memoria) + " x " + parseFloat(numero) + "% =";
+        pantallaActual.value = parseFloat(memoria) * parseFloat(memoria) * parseFloat(numero) / 100;
+        numero = parseFloat(memoria) * parseFloat(memoria) * parseFloat(numero) / 100;
+      }
+      // SI EL ÚLTIMO OPERADOR QUE SE PRESIONO FUE "÷" REALIZA UNA DIVISIÓN ENTRE EL VALOR DE MEMORIA Y EL PORCENTAJE DADO.
+      else if(operacion === "/") {
+        pantallaMemoria.value = parseFloat(memoria) + " ÷ " + parseFloat(numero) + "% =";
+        pantallaActual.value = parseFloat(memoria) / (parseFloat(memoria) * parseFloat(numero) / 100);
+        numero = parseFloat(memoria) / (parseFloat(memoria) * parseFloat(numero) / 100);
+      } 
+      operacion = "";
+      ultima = "p";
+    });
+
+    // VALOR PI //
+    botonPI.addEventListener("click", () => {
+      // SI NO SE A REALIZADO NINGUNA OPERACIÓN Y/O pantalla_actual ES IGUAL A "-0" ESCRIBE EL VALOR DE PI NEGATIVO EN LA pantalla_actual.
+      if(operacion === "" && numero === "-0" || numero === "-0") {
+        numero = "-";
+        pantallaActual.value = numero + Math.PI;
+        numero = pantallaActual.value;
+      }
+      // SI EL ÚLTIMO BOTON QUE SE PRESIONO FUE "=,²√, x², ¹/x ó %" HACE UN RESETEO Y CONTINUA.
+      else if(operacion === "=" || ultima === "r" || ultima === "c" || ultima === "e" || ultima === "p" || ultima === "") {
+        pantallaMemoria.value = "";
+        pantallaActual.value = Math.PI;
+        numero = Math.PI;    
+        operacion = ""; 
+      } else {  // ESCRIBE EL VALOR DE PI EN LA pantalla_actual.
+        pantallaActual.value = Math.PI;
+        numero = Math.PI;        
+      }
+      ultima = "π";
+    });
+  </script>
+</body>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+</html>

@@ -1,0 +1,229 @@
+/* ********** ********** ********** ********** ********** ********** ********** */
+/* HOJA DE ESTILOS "CALCULADORA ESTANDAR JAVASCRIPT" */
+/* ********** ********** ********** ********** ********** ********** ********** */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#calculadora {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 20% repeat(6, 1fr);
+    grid-column-gap: 1.5vh;
+    grid-row-gap: 1.5vh;
+    height: 60em;
+	width: 40em;
+    margin: auto;
+    padding: 3vh;
+    background: #ffffff;
+    /*--fondo-pantalla: hsla(30, 25%, 15%, 1);
+    --color-pantalla-1: hsla(30, 100%, 50%, 1);
+    --color-pantalla-2: hsla(30, 75%, 95%, 0.95);
+    --fondo-numeros: hsla(30, 80%, 25%, 0.25);
+    --fondo-operadores: hsla(30, 80%, 25%, 0.85);
+    --fondo-adicionales: hsla(30, 80%, 25%, 0.55);
+    --color-numeros: hsla(30, 25%, 15%, 1);
+    --color-operadores: hsla(30, 75%, 95%, 0.95);
+    --color-adicionales: hsla(30, 100%, 80%, 1);*/
+    --esquina: 1vh;
+    --sombra: 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75);
+    --fuente: 'Courier New', monospace;
+    --grueso-fuente: normal;
+    --tamano-fuente-01: 6vh;
+    --tamano-fuente-02: 4.5vh;
+    transform: scale(60%);
+}
+
+#pantalla {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 40% 60%;
+    grid-row-gap: 1.5vh;
+    padding: 3vh;
+    background: var(--fondo-pantalla, #000000);
+    border: none;
+    border-radius: var(--esquina, 1vh);
+    box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));		
+    grid-column: 1/5;
+}
+    
+#pantalla_memoria { 
+    outline: none;
+    background: transparent;
+    color: var(--color-pantalla-1, #aaaaaa);   	
+    border: none;
+    font-family: var(--fuente, Arial);
+    font-size: 5vh;
+    text-align: right;
+}
+
+#pantalla_actual {
+    outline: none;
+    background: transparent;
+    color: var(--color-pantalla-2, #ffffff);    	
+    border: none;
+    font-family: var(--fuente, Arial);
+    font-size: 8vh;
+    text-align: right;
+}
+
+.numeros {
+    border: none;
+    background: var(--fondo-numeros, #000000);
+    color: var(--color-numeros, #ffffff);
+    border-radius: var(--esquina, 1vh);
+    box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+    font-family: var(--fuente, Arial);
+    font-weight: var(--grueso-fuente, bold);
+    font-size: var(--tamano-fuente-01, 6vh);
+}
+
+#boton_mas_menos {    
+    font-size: var(--tamano-fuente-02, 4.5vh);
+}	
+    
+.operadores {
+    border: none;
+    background: var(--fondo-operadores, #dddddd);
+    color: var(--color-operadores, #000000);
+    border-radius: var(--esquina, 1vh);
+    box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+    font-family: var(--fuente, Arial);
+    font-weight: var(--grueso-fuente, bold);
+    font-size: var(--tamano-fuente-01, 6vh);
+}
+
+#boton_igual {
+    grid-column: 4/5;
+    grid-row: 6/8;
+}
+
+.adicionales {
+    border: none;
+    background: var(--fondo-adicionales, #555555);
+    color: var(--color-adicionales, #ffffff);
+    border-radius: var(--esquina, 1vh);
+    box-shadow: var(--sombra, 0.4vh 0.4vh 0.4vh rgba(0, 0, 0, 0.75));
+    font-family: var(--fuente, Arial);
+    font-weight: var(--grueso-fuente, bold);
+    font-size: var(--tamano-fuente-02, 4.5vh);
+}	
+
+#boton_inverso {
+    letter-spacing: -0.6vh;
+}
+
+#calculadora .numeros:hover, 
+#calculadora .operadores:hover, 
+#calculadora .adicionales:hover { 
+    background: var(--color-pantalla-1, rgba(0, 155, 255, 1));
+    color: hsla(30, 25%, 15%, 1);
+    font-size: 7vh;
+    cursor: pointer;
+    transform: scale(103%);
+}	
+
+#calculadora .adicionales:hover,
+#calculadora #boton_mas_menos:hover {
+    font-size: 5.5vh;
+}
+
+#calculadora .numeros:active {
+    background: var(--fondo-numeros, #000000);
+    color: var(--color-numeros, #ffffff);
+    font-size: var(--tamano-fuente-01, 6vh);
+    transform: scale(100%);
+}
+
+#calculadora #boton_mas_menos:active {
+    font-size: var(--tamano-fuente-02, 4.5vh);
+}
+
+#calculadora .operadores:active {
+    background: var(--fondo-operadores, #ffffff);
+    color: var(--color-operadores, #000000);
+    font-size: var(--tamano-fuente-01, 6vh);
+    transform: scale(100%);
+}
+
+#calculadora .adicionales:active {
+    background: var(--fondo-adicionales, #ffffff);
+    color: var(--color-adicionales, #aaaaaa);
+    font-size: var(--tamano-fuente-02, 4.5vh);
+    transform: scale(100%);
+}
+
+@media only screen and (orientation: landscape) {
+    #calculadora {
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: 30% repeat(3, 1fr);
+        height: 45em;
+	    width: 60em;
+    }
+
+    #pantalla {
+        grid-column: 1/9;
+    }
+
+    #boton_mas_menos { grid-area: 2 / 1 / 3 / 2; }
+    #boton_punto { grid-area: 3 / 1 / 4 / 2; }
+    #boton_cero { grid-area: 4 / 1 / 5 / 2; }
+    #boton_siete { grid-area: 2 / 2 / 3 / 3; }
+    #boton_cuatro { grid-area: 3 / 2 / 4 / 3; }
+    #boton_uno { grid-area: 4 / 2 / 5 / 3; }  
+    #boton_ocho { grid-area: 2 / 3 / 3 / 4; }
+    #boton_cinco { grid-area: 3 / 3 / 4 / 4; }
+    #boton_dos { grid-area: 4 / 3 / 5 / 4; }  
+    #boton_nueve { grid-area: 2 / 4 / 3 / 5; }
+    #boton_seis { grid-area: 3 / 4 / 4 / 5; }
+    #boton_tres { grid-area: 4 / 4 / 5 / 5; }
+    #boton_porcentaje { grid-area: 2 / 5 / 3 / 6; }
+    #boton_inverso { grid-area: 3 / 5 / 4 / 6; }
+    #boton_pi { grid-area: 4 / 5 / 5 / 6; }
+    #boton_resetear { grid-area: 2 / 6 / 3 / 7; }
+    #boton_potencia { grid-area: 3 / 6 / 4 / 7; }
+    #boton_raiz { grid-area: 4 / 6 / 5 / 7; }       
+    #boton_dividir { grid-area: 2 / 7 / 3 / 8; }
+    #boton_multiplicar { grid-area: 3 / 7 / 4 / 8; }
+    #boton_restar { grid-area: 2 / 8 / 3 / 9; }        
+    #boton_sumar { grid-area: 3 / 8 / 4 / 9; }
+    #boton_igual { grid-area: 4 / 7 / 5 / 9; }
+}
+
+@media only screen and (max-width: 650px) {
+    #calculadora {
+        height: 100vh;
+	    width: 100vw;
+        transform: scale(100%);
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    @media only screen and (max-width: 900px) {
+        @media only screen and (max-height: 450px) {
+            #calculadora {
+                height: 100vh;
+                width: 100vw;
+                --tamano-fuente-01: 10vh;
+                --tamano-fuente-02: 7.5vh;
+                transform: scale(100%);
+            }
+            #calculadora .numeros:hover, 
+            #calculadora .operadores:hover, 
+            #calculadora .adicionales:hover { 
+                font-size: 11vh;
+            }	
+
+            #calculadora .adicionales:hover,
+            #calculadora #boton_mas_menos:hover {
+                font-size: 8.5vh;
+            }
+        }
+    }
+}
+
+/* ********** ********** ********** ********** ********** ********** ********** */
+/* ********** ********** ********** ********** ********** ********** ********** */

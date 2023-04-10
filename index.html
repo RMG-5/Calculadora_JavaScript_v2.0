@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<head>
+    <meta charset="UTF-8" />
+	<meta name="keywords" content="Calculadora, JavaScript, HTML, CSS" />
+    <meta name="description" content="Calculadora Estándar CSS grid & JavaScript - querySelector & addEventListener" />  
+    <meta name="author" content="Ricardo García - R.M.G." />  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora Estándar CSS grid & JavaScript - querySelector & addEventListener</title>
+    <link href="img/logo-r-color.svg" rel="icon" type="image/x-icon" />
+    <link href="css/styles.css" rel="stylesheet" type="text/css" /> 	
+</head>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<body>	
+    <main class="contenido">
+		<div id="calculadora">
+						
+			<div id="pantalla">
+				<input type="text" class="pantallas" id="pantalla_memoria" readonly>			
+				<input type="text" class="pantallas" id="pantalla_actual" value="0" readonly>
+			</div>	
+			
+			<input type="button" class="adicionales" id="boton_porcentaje" value="%" />
+			<input type="button" class="adicionales" id="boton_pi" value="π" />			
+			<input type="button" class="adicionales" id="boton_resetear" value="C" />
+			<input type="button" class="operadores" id="boton_dividir" value="÷" />
+
+			<input type="button" class="adicionales" id="boton_inverso" value="¹/x" />
+			<input type="button" class="adicionales" id="boton_cuadrado" value="x²" />
+			<input type="button" class="adicionales" id="boton_raiz" value="²√" />
+			<input type="button" class="operadores" id="boton_multiplicar" value="x" />	
+
+			<input type="button" class="numeros numero" id="boton_siete" value="7" />
+			<input type="button" class="numeros numero" id="boton_ocho" value="8" />
+			<input type="button" class="numeros numero" id="boton_nueve" value="9" />
+			<input type="button" class="operadores" id="boton_restar" value="-" />
+
+			<input type="button" class="numeros numero" id="boton_cuatro" value="4" />
+			<input type="button" class="numeros numero" id="boton_cinco" value="5" />
+			<input type="button" class="numeros numero" id="boton_seis" value="6" />				
+			<input type="button" class="operadores" id="boton_sumar" value="+" />	
+			
+			<input type="button" class="numeros numero" id="boton_uno" value="1" />
+			<input type="button" class="numeros numero" id="boton_dos" value="2" />
+			<input type="button" class="numeros numero" id="boton_tres" value="3" />
+			
+			<input type="button" class="numeros" id="boton_mas_menos" value="+/-" />		
+			<input type="button" class="numeros numero" id="boton_cero" value="0" />
+			<input type="button" class="numeros" id="boton_punto" value="." />
+
+			<input type="button" class="operadores" id="boton_igual" value="=" />			
+		</div>
+	</main>	
+	<script src="js/script.js"></script>	
+</body>
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+<!-- ********** ********** ********** ********** ********** ********** ********** -->
+</html>
